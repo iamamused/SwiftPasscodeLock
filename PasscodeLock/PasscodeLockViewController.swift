@@ -55,8 +55,8 @@ public class PasscodeLockViewController: UIViewController, PasscodeLockTypeDeleg
         passcodeConfiguration = configuration
         passcodeLock = PasscodeLock(state: state, configuration: configuration)
         
-        let nibName = "PasscodeLockView"
-        let bundle: NSBundle = bundleForResource(nibName, ofType: "nib")
+        let nibName = configuration.nibName != nil ? configuration.nibName : "PasscodeLockView"
+        let bundle: NSBundle = bundleForResource(nibName!, ofType: "nib")
         
         super.init(nibName: nibName, bundle: bundle)
         

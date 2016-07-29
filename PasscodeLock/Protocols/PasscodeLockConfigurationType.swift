@@ -15,4 +15,6 @@ public protocol PasscodeLockConfigurationType {
     var isTouchIDAllowed: Bool {get set}
     var shouldRequestTouchIDImmediately: Bool {get}
     var maximumInccorectPasscodeAttempts: Int {get}
+    var nibName: String? {get set}
+
 }
