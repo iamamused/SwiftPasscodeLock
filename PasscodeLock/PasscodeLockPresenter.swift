@@ -10,6 +10,9 @@ import UIKit
 
 public class PasscodeLockPresenter {
     
+    public var maximumInccorectPasscodeAttemptsCallback: (()->Void)?
+    public var forgotPasswordCallback: (()->Void)?
+
     private var mainWindow: UIWindow?
     
     private lazy var passcodeLockWindow: UIWindow = {
@@ -65,6 +68,24 @@ public class PasscodeLockPresenter {
             self?.dismissPasscodeLock()
         }
         
+        let userMaxAttemptsCallback = passcodeLockVC.maximumInccorectPasscodeAttemptsCallback
+        
+        passcodeLockVC.maximumInccorectPasscodeAttemptsCallback = { [weak self] in
+            
+            userMaxAttemptsCallback?()
+            
+            self?.maximumInccorectPasscodeAttemptsCallback?()
+        }
+        
+        let userForgotPasscodeCallback = passcodeLockVC.forgotPasswordCallback
+        
+        passcodeLockVC.forgotPasswordCallback = { [weak self] in
+            
+            userForgotPasscodeCallback?()
+            
+            self?.forgotPasswordCallback?()
+        }
+
         passcodeLockWindow.rootViewController = passcodeLockVC
     }
     

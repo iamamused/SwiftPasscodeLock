@@ -10,6 +10,10 @@ import UIKit
 
 public class PasscodeLockViewController: UIViewController, PasscodeLockTypeDelegate {
     
+    var inccorectPasscodeAttempts: Int = 0
+    public var maximumInccorectPasscodeAttemptsCallback: (()->Void)?
+    public var forgotPasswordCallback: (()->Void)?
+    
     public enum LockState {
         case EnterPasscode
         case SetPasscode
@@ -154,6 +158,11 @@ public class PasscodeLockViewController: UIViewController, PasscodeLockTypeDeleg
         passcodeLock.authenticateWithBiometrics()
     }
     
+    
+    @IBAction public func forgotPasswordButtonTap(sender: UIButton) {
+        forgotPasswordCallback?()
+    }
+    
     private func authenticateWithBiometrics() {
         
         if passcodeConfiguration.shouldRequestTouchIDImmediately && passcodeLock.isTouchIDAllowed {
@@ -244,8 +253,11 @@ public class PasscodeLockViewController: UIViewController, PasscodeLockTypeDeleg
     }
     
     public func passcodeLockDidFail(lock: PasscodeLockType) {
-        
         animateWrongPassword()
+        inccorectPasscodeAttempts += 1
+        if inccorectPasscodeAttempts >= passcodeConfiguration.maximumInccorectPasscodeAttempts {
+            maximumInccorectPasscodeAttemptsCallback?()
+        }
     }
     
     public func passcodeLockDidChangeState(lock: PasscodeLockType) {
